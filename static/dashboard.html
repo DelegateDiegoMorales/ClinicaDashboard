@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Delégate · Métricas de Sesión</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root{
+    --teal:#01A49A; --teal-dark:#00776F; --teal-bg:#E6F6F5;
+    --purple:#5B21B6; --purple-bg:#F3EEFB;
+    --ink:#1A2B33; --gray:#64748B; --line:#E6EBEF; --bg:#F7FAFA; --card:#FFFFFF;
+    --amber:#D97706; --red:#DC2626; --green:#059669;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',system-ui,-apple-system,sans-serif}
+  body{background:var(--bg);color:var(--ink);font-size:14px}
+  .app{display:flex;min-height:100vh}
+  .sidebar{width:220px;background:#fff;border-right:1px solid var(--line);padding:20px 0;position:fixed;top:0;bottom:0;display:flex;flex-direction:column}
+  .side-logo{padding:0 20px 18px;border-bottom:1px solid var(--line)}
+  .side-logo .nm{font-weight:700;font-size:16px;color:var(--purple)}
+  .side-logo .sub{font-size:10.5px;color:var(--gray)}
+  nav{margin-top:14px;flex:1}
+  .nav-item{display:flex;align-items:center;gap:11px;padding:11px 20px;cursor:pointer;color:var(--gray);border-left:3px solid transparent;font-size:13.5px}
+  .nav-item:hover{background:var(--bg);color:var(--ink)}
+  .nav-item.active{border-left-color:var(--teal);color:var(--teal-dark);background:var(--teal-bg);font-weight:600}
+  .side-foot{padding:14px 20px;border-top:1px solid var(--line);font-size:11px;color:var(--gray)}
+  .main{margin-left:220px;flex:1;display:flex;flex-direction:column}
+  .topbar{display:flex;align-items:center;justify-content:space-between;background:#fff;border-bottom:1px solid var(--line);padding:14px 28px;position:sticky;top:0;z-index:5}
+  .topbar h1{font-size:16px;font-weight:600}
+  .topbar .crumb{font-size:11.5px;color:var(--gray);margin-top:2px}
+  select{padding:7px 10px;border:1px solid var(--line);border-radius:8px;font-size:13px;color:var(--ink)}
+  .content{padding:24px 28px;max-width:1100px}
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:22px}
+  .kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px}
+  .kpi .lbl{font-size:11.5px;color:var(--gray);margin-bottom:6px}
+  .kpi .val{font-size:26px;font-weight:700}
+  .kpi .val small{font-size:14px;color:var(--gray);font-weight:600}
+  .grid2{display:grid;grid-template-columns:1.4fr 1fr;gap:14px;margin-bottom:14px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px}
+  .card h3{font-size:13px;font-weight:600;margin-bottom:12px}
+  table{width:100%;border-collapse:collapse}
+  th{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--gray);text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)}
+  td{padding:10px;border-bottom:1px solid var(--line);font-size:13px}
+  tr.clickable{cursor:pointer} tr.clickable:hover{background:var(--teal-bg)}
+  .pill{display:inline-block;padding:2.5px 9px;border-radius:99px;font-size:11px;font-weight:600}
+  .pill.ok{background:#E7F6EF;color:var(--green)} .pill.mid{background:#FEF4E6;color:var(--amber)} .pill.bad{background:#FDEBEB;color:var(--red)}
+  .pill.mode{background:var(--purple-bg);color:var(--purple)} .pill.off{background:#EEF2F5;color:var(--gray)}
+  .bar{height:7px;background:#EEF2F5;border-radius:99px;overflow:hidden;min-width:70px}
+  .bar i{display:block;height:100%;border-radius:99px;background:var(--teal)}
+  .view{display:none} .view.active{display:block}
+  .step{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px dashed var(--line)}
+  .step:last-child{border-bottom:none}
+  .step .n{width:24px;height:24px;border-radius:50%;font-size:12px;display:flex;align-items:center;justify-content:center;flex:none;color:#fff}
+  .step .nm2{flex:1;font-size:13px}
+  .n.hecho{background:var(--green)} .n.omitido{background:var(--red)} .n.no_disponible{background:#B6C0CA}
+  .scen-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
+  .scen{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  .scen .ph{height:90px;display:flex;align-items:center;justify-content:center;font-size:38px;background:var(--teal-bg)}
+  .scen .bd{padding:13px 15px}
+  .scen .bd b{font-size:14px;display:block;margin-bottom:3px}
+  .scen .bd span{font-size:11.5px;color:var(--gray)}
+  .empty{padding:40px;text-align:center;color:var(--gray)}
+  .back{color:var(--teal-dark);cursor:pointer;font-size:12.5px;margin-bottom:12px;display:inline-block}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="side-logo"><div class="nm">Delégate</div><div class="sub">Análisis de Capacitación Clínica</div></div>
+    <nav>
+      <div class="nav-item active" data-view="dashboard">📊 Dashboard</div>
+      <div class="nav-item" data-view="historial">🗂️ Historial</div>
+      <div class="nav-item" data-view="actividades">🎯 Actividades</div>
+    </nav>
+    <div class="side-foot">Demo · Usuario único</div>
+  </aside>
+
+  <div class="main">
+    <div class="topbar">
+      <div><h1 id="viewTitle">Dashboard</h1><div class="crumb" id="viewCrumb">Métricas de la sesión</div></div>
+      <select id="filtroActividad"><option value="">Todas las actividades</option></select>
+    </div>
+    <div class="content">
+
+      <!-- DASHBOARD -->
+      <section class="view active" id="v-dashboard">
+        <div class="kpis" id="kpis"></div>
+        <div class="grid2">
+          <div class="card"><h3>Porcentaje logrado por sesión</h3><canvas id="chPct" height="120"></canvas></div>
+          <div class="card"><h3>Aciertos vs pasos</h3><canvas id="chPasos" height="120"></canvas></div>
+        </div>
+        <div class="card">
+          <h3>Sesiones recientes</h3>
+          <div id="tablaReciente"></div>
+        </div>
+      </section>
+
+      <!-- HISTORIAL -->
+      <section class="view" id="v-historial">
+        <div class="card"><h3>Historial de sesiones</h3><div id="tablaHistorial"></div></div>
+        <div class="card" id="detalle" style="display:none;margin-top:14px"></div>
+      </section>
+
+      <!-- ACTIVIDADES -->
+      <section class="view" id="v-actividades">
+        <div class="scen-grid" id="scenGrid"></div>
+      </section>
+
+    </div>
+  </div>
+</div>
+
+<script>
+const API = "";  // mismo origen
+let SESIONES = [], ACTIVIDADES = {}, charts = {};
+
+const fmtTiempo = s => { s=Math.round(s||0); return `${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`; };
+const pill = p => p>=80?'ok':(p>=50?'mid':'bad');
+
+async function cargar(){
+  ACTIVIDADES = await (await fetch(API+"/api/actividades")).json();
+  SESIONES = await (await fetch(API+"/api/sesiones")).json();
+  llenarFiltro();
+  render();
+}
+
+function llenarFiltro(){
+  const sel = document.getElementById('filtroActividad');
+  sel.innerHTML = '<option value="">Todas las actividades</option>' +
+    Object.values(ACTIVIDADES).map(a=>`<option value="${a.id}">${a.icono} ${a.nombre}</option>`).join('');
+  sel.onchange = render;
+}
+
+function sesionesFiltradas(){
+  const f = document.getElementById('filtroActividad').value;
+  return f ? SESIONES.filter(s=>s.actividadId===f) : SESIONES;
+}
+
+function render(){
+  const ss = sesionesFiltradas();
+  renderKpis(ss); renderCharts(ss);
+  document.getElementById('tablaReciente').innerHTML = tabla(ss.slice(0,6));
+  document.getElementById('tablaHistorial').innerHTML = tabla(ss);
+  renderActividades();
+}
+
+function renderKpis(ss){
+  const n = ss.length;
+  const prom = n ? Math.round(ss.reduce((a,s)=>a+(s.metricas?.porcentaje||0),0)/n) : 0;
+  const mejor = n ? Math.max(...ss.map(s=>s.metricas?.porcentaje||0)) : 0;
+  const tprom = n ? ss.reduce((a,s)=>a+(s.metricas?.tiempoSeg||0),0)/n : 0;
+  document.getElementById('kpis').innerHTML = `
+    <div class="kpi"><div class="lbl">Sesiones</div><div class="val">${n}</div></div>
+    <div class="kpi"><div class="lbl">% Logrado promedio</div><div class="val">${prom}<small>%</small></div></div>
+    <div class="kpi"><div class="lbl">Mejor sesión</div><div class="val">${mejor}<small>%</small></div></div>
+    <div class="kpi"><div class="lbl">Tiempo promedio</div><div class="val">${fmtTiempo(tprom)}</div></div>`;
+}
+
+function tabla(ss){
+  if(!ss.length) return '<div class="empty">Sin sesiones aún. Envía una desde Unity (POST /api/sesiones).</div>';
+  return `<table><thead><tr><th>Fecha</th><th>Actividad</th><th>Pasos</th><th>Aciertos</th><th>% Logrado</th><th>Tiempo</th></tr></thead><tbody>${
+    ss.map(s=>{const m=s.metricas||{};const p=m.porcentaje||0;return `
+      <tr class="clickable" onclick="verDetalle('${s.id}')">
+        <td>${s.guardadoEn||'—'}</td>
+        <td>${m.actividadNombre||s.actividadId||'—'}</td>
+        <td>${m.pasosHechos||0} / ${m.pasosTotales||0}</td>
+        <td>${m.aciertos??'—'}</td>
+        <td><div style="display:flex;align-items:center;gap:8px"><div class="bar" style="flex:1"><i style="width:${p}%"></i></div><span class="pill ${pill(p)}">${p}%</span></div></td>
+        <td>${fmtTiempo(m.tiempoSeg)}</td>
+      </tr>`}).join('')}</tbody></table>`;
+}
+
+function renderCharts(ss){
+  const orden = [...ss].reverse();
+  const labels = orden.map((s,i)=>`#${i+1}`);
+  dibujar('chPct','line',labels,[{label:'% Logrado',data:orden.map(s=>s.metricas?.porcentaje||0),borderColor:'#01A49A',backgroundColor:'rgba(1,164,154,.12)',fill:true,tension:.3}]);
+  dibujar('chPasos','bar',labels,[
+    {label:'Aciertos',data:orden.map(s=>s.metricas?.aciertos||0),backgroundColor:'#5B21B6'},
+    {label:'Pasos hechos',data:orden.map(s=>s.metricas?.pasosHechos||0),backgroundColor:'#01A49A'}]);
+}
+
+function dibujar(id,type,labels,datasets){
+  if(charts[id]) charts[id].destroy();
+  charts[id] = new Chart(document.getElementById(id),{type,data:{labels,datasets},
+    options:{responsive:true,plugins:{legend:{display:datasets.length>1}},scales:{y:{beginAtZero:true}}}});
+}
+
+function verDetalle(id){
+  const s = SESIONES.find(x=>x.id===id); if(!s) return;
+  const m = s.metricas||{};
+  document.querySelector('[data-view="historial"]').click();
+  const d = document.getElementById('detalle');
+  d.style.display='block';
+  d.innerHTML = `
+    <span class="back" onclick="document.getElementById('detalle').style.display='none'">← cerrar</span>
+    <h3>${m.actividadNombre||s.actividadId} · ${s.guardadoEn||''}</h3>
+    <div class="kpis" style="margin:12px 0">
+      <div class="kpi"><div class="lbl">Pasos</div><div class="val">${m.pasosHechos||0}<small>/${m.pasosTotales||0}</small></div></div>
+      <div class="kpi"><div class="lbl">Aciertos</div><div class="val">${m.aciertos??'—'}</div></div>
+      <div class="kpi"><div class="lbl">% Logrado</div><div class="val">${m.porcentaje||0}<small>%</small></div></div>
+      <div class="kpi"><div class="lbl">Tiempo</div><div class="val">${fmtTiempo(m.tiempoSeg)}</div></div>
+    </div>
+    <div>${(m.pasos||[]).map((p,i)=>{
+      const ic = p.estado==='hecho'?'✓':(p.estado==='omitido'?'✕':'–');
+      const et = p.estado==='hecho'?'<span class="pill ok">Hecho</span>':(p.estado==='omitido'?'<span class="pill bad">Omitido</span>':'<span class="pill off">No disponible</span>');
+      return `<div class="step"><div class="n ${p.estado}">${ic}</div><div class="nm2">${p.nombre}</div>${et}</div>`;
+    }).join('')||'<div class="empty">Esta sesión no trae definición de pasos.</div>'}</div>`;
+  d.scrollIntoView({behavior:'smooth'});
+}
+
+function renderActividades(){
+  document.getElementById('scenGrid').innerHTML = Object.values(ACTIVIDADES).map(a=>{
+    const disp = a.pasos.filter(p=>p.disponible).length;
+    const nS = SESIONES.filter(s=>s.actividadId===a.id).length;
+    return `<div class="scen"><div class="ph">${a.icono}</div><div class="bd"><b>${a.nombre}</b>
+      <span>${disp} de ${a.pasos.length} pasos activos · ${nS} sesiones</span></div></div>`;
+  }).join('');
+}
+
+// navegación
+document.querySelectorAll('.nav-item').forEach(it=>it.onclick=()=>{
+  document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('active'));
+  it.classList.add('active');
+  const v=it.dataset.view;
+  document.querySelectorAll('.view').forEach(s=>s.classList.remove('active'));
+  document.getElementById('v-'+v).classList.add('active');
+  const t={dashboard:['Dashboard','Métricas de la sesión'],historial:['Historial','Sesiones registradas'],actividades:['Actividades','Escenarios disponibles']};
+  document.getElementById('viewTitle').textContent=t[v][0];
+  document.getElementById('viewCrumb').textContent=t[v][1];
+});
+
+cargar();
+setInterval(cargar, 8000); // refresco para la demo
+</script>
+</body>
+</html>

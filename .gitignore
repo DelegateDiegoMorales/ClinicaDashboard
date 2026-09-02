@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+
+# Datos locales (historial en tu PC; en Vercel se usa KV)
+data/
+*.local.json
+
+# Vercel
+.vercel/
+
+# Sistema / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
