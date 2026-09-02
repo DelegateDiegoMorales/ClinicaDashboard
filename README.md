@@ -31,6 +31,25 @@ Abrir http://localhost:5000 (guarda en `./data/sesiones.json`).
 > no en archivos. Si no configuras KV, la API responde pero no persiste entre
 > invocaciones.
 
+## Poblar el dashboard con un alumno simulado (seed)
+El dashboard (`api/dashboard.html`) es el template real de Delégate y se llena
+**en vivo** con las sesiones que hay en la API (KPIs, curva de aprendizaje,
+errores por paso, tabla de sesiones, detalle del alumno y escenarios). El resto
+de vistas (habilidades blandas, monitoreo) quedan como demo visual.
+
+Para simular un alumno que va dejando data:
+```bash
+python seed.py                       # contra http://localhost:5000
+python seed.py https://tu.vercel.app # contra tu deploy
+```
+Genera 13 sesiones de "Camila Fuentes" (9 de Resonancia + 4 de Lavado) con mejora
+progresiva. Usa ids fijos (`seed-...`), así re-ejecutarlo no duplica. Luego, las
+sesiones reales que llegan desde Unity (POST) se **suman** a esa data.
+
+> El dashboard pide login (cualquier correo/clave sirve en la demo). Tras entrar,
+> hace `fetch` a `/api/sesiones` y `/api/actividades` y sobreescribe la demo con
+> la data real. Para refrescar sin recargar: consola del navegador → `DelegateRefrescar()`.
+
 ## Enviar una sesión (Unity o prueba)
 `POST /api/sesiones`:
 ```json

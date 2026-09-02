@@ -30,7 +30,8 @@ def recibir_sesion():
         return jsonify({"error": "JSON inválido"}), 400
 
     s["id"] = s.get("id") or uuid.uuid4().hex[:12]
-    s["guardadoEn"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    # Respeta una fecha provista (para seed/demo); si no, usa la actual.
+    s["guardadoEn"] = s.get("guardadoEn") or datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     s.setdefault("usuario", "Usuario Demo")
     s["metricas"] = actividades.calcular_metricas(s)
 

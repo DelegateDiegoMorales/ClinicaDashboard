@@ -10,8 +10,9 @@ try:
 except ImportError:
     requests = None
 
-KV_URL = os.environ.get("KV_REST_API_URL")
-KV_TOKEN = os.environ.get("KV_REST_API_TOKEN")
+# Acepta el nombre de Vercel KV o el de Upstash (Marketplace), lo que exista.
+KV_URL = os.environ.get("KV_REST_API_URL") or os.environ.get("UPSTASH_REDIS_REST_URL")
+KV_TOKEN = os.environ.get("KV_REST_API_TOKEN") or os.environ.get("UPSTASH_REDIS_REST_TOKEN")
 KEY = "delegate:sesiones"
 
 HERE = os.path.dirname(os.path.abspath(__file__))
