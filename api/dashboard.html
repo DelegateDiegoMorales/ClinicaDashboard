@@ -236,7 +236,7 @@
 
         <div class="grid2">
           <div class="card">
-            <h3>Curva de aprendizaje en Resonancia Magnética</h3>
+            <h3>Curva de aprendizaje</h3>
             <div class="hint">Cumplimiento promedio del protocolo por intento</div>
             <canvas id="chLearn"></canvas>
           </div>
@@ -251,10 +251,10 @@
           <h3>Últimas sesiones evaluadas</h3>
           <table>
             <tr><th>Alumno</th><th>Escenario</th><th>Tiempo</th><th>Errores</th><th>Cumplimiento</th><th>Resultado</th></tr>
-            <tr><td>C. Fuentes</td><td>Resonancia Magnética</td><td>6:51</td><td>1</td><td>96%</td><td><span class="pill ok">Aprobado</span></td></tr>
-            <tr><td>M. Araya</td><td>Resonancia Magnética</td><td>8:15</td><td>2</td><td>88%</td><td><span class="pill ok">Aprobado</span></td></tr>
-            <tr><td>J. Soto</td><td>Resonancia Magnética</td><td>10:02</td><td>4</td><td>71%</td><td><span class="pill mid">Reforzar</span></td></tr>
-            <tr><td>P. Reyes</td><td>Resonancia Magnética</td><td>12:40</td><td>6</td><td>58%</td><td><span class="pill bad">Repetir</span></td></tr>
+            <tr class="clickable" onclick="mostrarSesion('d1')"><td>C. Fuentes</td><td>Resonancia Magnética</td><td>6:51</td><td>1</td><td>96%</td><td><span class="pill ok">Aprobado</span></td></tr>
+            <tr class="clickable" onclick="mostrarSesion('d2')"><td>M. Araya</td><td>Resonancia Magnética</td><td>8:15</td><td>2</td><td>88%</td><td><span class="pill ok">Aprobado</span></td></tr>
+            <tr class="clickable" onclick="mostrarSesion('d3')"><td>J. Soto</td><td>Resonancia Magnética</td><td>10:02</td><td>4</td><td>71%</td><td><span class="pill mid">Reforzar</span></td></tr>
+            <tr class="clickable" onclick="mostrarSesion('d4')"><td>P. Reyes</td><td>Resonancia Magnética</td><td>12:40</td><td>6</td><td>58%</td><td><span class="pill bad">Repetir</span></td></tr>
           </table>
         </div>
       </section>
@@ -298,7 +298,7 @@
             </div>
           </div>
           <div class="card" style="margin-top:14px">
-            <h3>Historial de sesiones en Resonancia Magnética</h3>
+            <h3>Historial de sesiones</h3>
             <div class="hint">Registro automático de cada sesión en el simulador.</div>
             <table>
               <tr><th>#</th><th>Fecha</th><th>Tiempo</th><th>Errores</th><th>Cumplimiento</th><th>Resultado</th></tr>
@@ -330,6 +330,14 @@
               <b>Resonancia Magnética <span class="tag-demo">DEMO</span></b>
               <span>Preparación del paciente, seguridad magnética y operación del equipo</span>
               <div class="meta"><span>7 pasos evaluados</span><span>187 sesiones</span></div>
+            </div>
+          </div>
+          <div class="scen">
+            <div class="ph" style="background:linear-gradient(135deg,#01A49A,#00776F);display:flex;align-items:center;justify-content:center"><span style="font-size:46px">🧼</span></div>
+            <div class="bd">
+              <b>Lavado de Manos Quirúrgico <span class="tag-demo">DEMO</span></b>
+              <span>Antisepsia quirúrgica: retiro de accesorios, mojado, fricción, enjuague y secado estéril</span>
+              <div class="meta" id="metaLavado"><span>7 pasos evaluados</span><span>0 sesiones</span></div>
             </div>
           </div>
           <div class="scen">
@@ -661,7 +669,7 @@ new Chart(chBlandas,{type:'radar',data:{
   async function aplicar(){
     await cargar();
     if(!SES.length){console.info('[Delegate] sin sesiones — se muestra la demo.');return;}
-    try{setUltimas();setAlumnos();}
+    try{setUltimas();setAlumnos();const nL=SES.filter(s=>s.actividadId==='lavado_manos').length;const ml=document.getElementById('metaLavado');if(ml)ml.innerHTML='<span>7 pasos evaluados</span><span>'+nL+' sesiones</span>';}
     catch(e){console.warn('[Delegate] error aplicando data',e);}
   }
   if(typeof initCharts==='function'){const orig=initCharts;initCharts=function(){orig();setTimeout(aplicar,60);};}
@@ -678,8 +686,18 @@ new Chart(chBlandas,{type:'radar',data:{
       +'<div class="kpis" id="msKpis" style="grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px"></div>'
       +'<h3 style="font-size:12.5px">Pasos</h3><div id="msPasos"></div></div></div>');
   })();
+  
+  const PASOS_RM=['Presiona Iniciar','Retira implementos metálicos','Cambio de ropa','Traslada al paciente a resonancia','Ingreso a la sala','El paciente se sienta','El paciente se acuesta','El paciente entra al tubo','Inicia el escaneo','Termina el escaneo','Cierra la sesión'];
+  const fabPasos=(nom,nOmit)=>nom.map((n,i)=>({codigo:'P'+i,nombre:n,estado:i>=nom.length-nOmit?'omitido':'hecho'}));
+  const demoSes=(u,fecha,pct,seg,nErr)=>({usuario:u,guardadoEn:fecha,actividadId:'resonancia',metricas:{actividadNombre:'Resonancia Magnética',porcentaje:pct,tiempoSeg:seg,pasosHechos:11-nErr,pasosTotales:11,pasos:fabPasos(PASOS_RM,nErr)}});
+  const DEMO={
+    d1:demoSes('C. Fuentes','2026-07-21 09:14',96,411,1),
+    d2:demoSes('M. Araya','2026-07-19 11:02',88,495,2),
+    d3:demoSes('J. Soto','2026-07-18 16:20',71,602,4),
+    d4:demoSes('P. Reyes','2026-07-16 10:31',58,760,6),
+  };
   window.mostrarSesion=function(id){
-    const s=SES.find(x=>String(x.id)===String(id)); if(!s)return;
+    const s=SES.find(x=>String(x.id)===String(id))||DEMO[id]; if(!s)return;
     const m=s.metricas||{};
     document.getElementById('msTitulo').textContent=(s.usuario||'Alumno');
     document.getElementById('msSub').textContent=(m.actividadNombre||s.actividadId||'')+' · '+(s.guardadoEn||'');
