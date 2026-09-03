@@ -267,10 +267,10 @@
             <div class="hint">Haz clic en un alumno para ver su detalle, feedback y evolución</div>
             <table id="tbl-alumnos">
               <tr><th>Alumno</th><th>Rol</th><th>Sesiones</th><th>Prácticas</th><th>Última sesión</th><th>Mejor tiempo</th><th>Cumplimiento</th><th>Progreso</th><th>Estado</th></tr>
-              <tr class="clickable" onclick="showAlumno()"><td><b>Camila Fuentes</b></td><td>Tecnólogo médico</td><td>8</td><td>11</td><td>21 jul</td><td>6:51</td><td>96%</td><td><div class="bar"><i style="width:96%"></i></div></td><td><span class="pill ok">Certificable</span></td></tr>
-              <tr class="clickable" onclick="showAlumno()"><td><b>Miguel Araya</b></td><td>Técnico enfermería</td><td>6</td><td>9</td><td>19 jul</td><td>8:15</td><td>88%</td><td><div class="bar"><i style="width:88%"></i></div></td><td><span class="pill ok">Certificable</span></td></tr>
-              <tr class="clickable" onclick="showAlumno()"><td><b>Javiera Soto</b></td><td>Técnico enfermería</td><td>4</td><td>5</td><td>18 jul</td><td>10:02</td><td>71%</td><td><div class="bar"><i style="width:71%"></i></div></td><td><span class="pill mid">En progreso</span></td></tr>
-              <tr class="clickable" onclick="showAlumno()"><td><b>Pablo Reyes</b></td><td>Auxiliar</td><td>2</td><td>3</td><td>16 jul</td><td>12:40</td><td>58%</td><td><div class="bar"><i style="width:58%"></i></div></td><td><span class="pill bad">Requiere apoyo</span></td></tr>
+              <tr class="clickable" onclick="showAlumno('Camila Fuentes')"><td><b>Camila Fuentes</b></td><td>Tecnólogo médico</td><td>8</td><td>11</td><td>21 jul</td><td>6:51</td><td>96%</td><td><div class="bar"><i style="width:96%"></i></div></td><td><span class="pill ok">Certificable</span></td></tr>
+              <tr class="clickable" onclick="showAlumno('Miguel Araya')"><td><b>Miguel Araya</b></td><td>Técnico enfermería</td><td>6</td><td>9</td><td>19 jul</td><td>8:15</td><td>88%</td><td><div class="bar"><i style="width:88%"></i></div></td><td><span class="pill ok">Certificable</span></td></tr>
+              <tr class="clickable" onclick="showAlumno('Javiera Soto')"><td><b>Javiera Soto</b></td><td>Técnico enfermería</td><td>4</td><td>5</td><td>18 jul</td><td>10:02</td><td>71%</td><td><div class="bar"><i style="width:71%"></i></div></td><td><span class="pill mid">En progreso</span></td></tr>
+              <tr class="clickable" onclick="showAlumno('Pablo Reyes')"><td><b>Pablo Reyes</b></td><td>Auxiliar</td><td>2</td><td>3</td><td>16 jul</td><td>12:40</td><td>58%</td><td><div class="bar"><i style="width:58%"></i></div></td><td><span class="pill bad">Requiere apoyo</span></td></tr>
             </table>
           </div>
         </div>
@@ -637,7 +637,7 @@ new Chart(chBlandas,{type:'radar',data:{
     const by={};SES.forEach(s=>{(by[s.usuario||'Alumno']=by[s.usuario||'Alumno']||[]).push(s);});
     const live=Object.entries(by).map(([u,a])=>{
       const mt=Math.min(...a.map(s=>s.metricas?.tiempoSeg||9999)),mp=Math.max(...a.map(s=>s.metricas?.porcentaje||0)),ult=a[a.length-1];
-      return `<tr class="clickable" onclick="showAlumno()"><td><b>${u}</b></td><td>Alumno</td><td>${a.length}</td><td>0</td><td>${(ult.guardadoEn||'').slice(5,10)}</td><td>${mmss(mt)}</td><td><div class="bar"><i style="width:${mp}%"></i></div></td><td>${mp}%</td><td>${pill(mp)}</td></tr>`;
+      return `<tr class="clickable" onclick="showAlumno('${u}')"><td><b>${u}</b></td><td>Alumno</td><td>${a.length}</td><td>0</td><td>${(ult.guardadoEn||'').slice(5,10)}</td><td>${mmss(mt)}</td><td>${mp}%</td><td><div class="bar"><i style="width:${mp}%"></i></div></td><td>${pill(mp)}</td></tr>`;
     }).join('');
     t.innerHTML=head+live+demo;
   }
@@ -666,6 +666,30 @@ new Chart(chBlandas,{type:'radar',data:{
   }
   if(typeof initCharts==='function'){const orig=initCharts;initCharts=function(){orig();setTimeout(aplicar,60);};}
   window.DelegateRefrescar=aplicar;
+
+  // Detalle del alumno clickeado (real si está en vivo; demo si no).
+  function poblarDetalle(nombre){
+    const kp=$$('#alumno-detail .kpis .kpi .val');
+    if(nombre && kp.length>=1) kp[0].textContent=nombre;
+    const a=SES.filter(s=>(s.usuario||'Alumno')===nombre);
+    if(!a.length) return;
+    if(kp.length>=4){kp[1].textContent=a.length;kp[2].textContent=Math.max(...a.map(s=>s.metricas?.porcentaje||0))+'%';kp[3].textContent=mmss(Math.min(...a.map(s=>s.metricas?.tiempoSeg||9999)));}
+    updChart('chAlumno',c=>{c.data.labels=a.map((_,i)=>'Int. '+(i+1));c.data.datasets[0].data=a.map(s=>s.metricas?.porcentaje||0);c.data.datasets[1].data=a.map(s=>(s.metricas?.tiempoSeg||0)/60);});
+    const ts=$$('#alumno-detail table'),t=ts[ts.length-1];
+    if(t){const hh=t.querySelector('tr');t.innerHTML=hh.outerHTML+a.slice().reverse().map((s,i)=>{const m=s.metricas||{};return `<tr><td>${a.length-i}</td><td>${(s.guardadoEn||'').slice(5,16)}</td><td>${mmss(m.tiempoSeg)}</td><td>${errs(m)}</td><td>${m.porcentaje||0}%</td><td>${pill(m.porcentaje||0)}</td></tr>`;}).join('');}
+  }
+  window.showAlumno=function(nombre){
+    document.getElementById('alumnos-list').style.display='none';
+    document.getElementById('alumno-detail').style.display='block';
+    poblarDetalle(nombre);
+  };
+  // Mantener la sesión (F5 no vuelve a pedir login).
+  (function(){
+    const KEY='delegate_login'; const orig=window.doLogin;
+    window.doLogin=function(e){ try{localStorage.setItem(KEY,'1');}catch(_){}; return orig?orig.call(this,e):undefined; };
+    if(localStorage.getItem(KEY)==='1'){ try{ window.doLogin({preventDefault(){}}); }catch(_){} }
+  })();
+
 })();
 </script>
 
