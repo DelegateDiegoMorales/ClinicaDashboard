@@ -228,7 +228,7 @@
       <section class="view active" id="v-dashboard">
         <div class="kpis">
           <div class="kpi"><div class="lbl">Alumnos activos</div><div class="val">24</div><div class="trend up">▲ 6 este mes</div></div>
-          <div class="kpi"><div class="lbl">Sesiones (modo prueba)</div><div class="val">187</div><div class="trend up">▲ 12% vs mes anterior</div></div>
+          <div class="kpi"><div class="lbl">Sesiones</div><div class="val">187</div><div class="trend up">▲ 12% vs mes anterior</div></div>
           <div class="kpi"><div class="lbl">Cumplimiento promedio</div><div class="val">86%</div><div class="trend up">▲ 9 pts desde inicio</div></div>
           <div class="kpi"><div class="lbl">Tiempo promedio</div><div class="val">7:42</div><div class="trend up">▼ 1:38 desde inicio</div></div>
           <div class="kpi"><div class="lbl">Errores por sesión</div><div class="val">1.8</div><div class="trend up">▼ desde 4.3 inicial</div></div>
@@ -237,7 +237,7 @@
         <div class="grid2">
           <div class="card">
             <h3>Curva de aprendizaje en Resonancia Magnética</h3>
-            <div class="hint">Cumplimiento promedio del protocolo por intento (modo prueba)</div>
+            <div class="hint">Cumplimiento promedio del protocolo por intento</div>
             <canvas id="chLearn"></canvas>
           </div>
           <div class="card">
@@ -250,11 +250,11 @@
         <div class="card">
           <h3>Últimas sesiones evaluadas</h3>
           <table>
-            <tr><th>Alumno</th><th>Escenario</th><th>Modo</th><th>Tiempo</th><th>Errores</th><th>Cumplimiento</th><th>Resultado</th></tr>
-            <tr><td>C. Fuentes</td><td>Resonancia Magnética</td><td><span class="pill mode">Prueba</span></td><td>6:51</td><td>1</td><td>96%</td><td><span class="pill ok">Aprobado</span></td></tr>
-            <tr><td>M. Araya</td><td>Resonancia Magnética</td><td><span class="pill mode">Prueba</span></td><td>8:15</td><td>2</td><td>88%</td><td><span class="pill ok">Aprobado</span></td></tr>
-            <tr><td>J. Soto</td><td>Resonancia Magnética</td><td><span class="pill mode">Prueba</span></td><td>10:02</td><td>4</td><td>71%</td><td><span class="pill mid">Reforzar</span></td></tr>
-            <tr><td>P. Reyes</td><td>Resonancia Magnética</td><td><span class="pill mode">Prueba</span></td><td>12:40</td><td>6</td><td>58%</td><td><span class="pill bad">Repetir</span></td></tr>
+            <tr><th>Alumno</th><th>Escenario</th><th>Tiempo</th><th>Errores</th><th>Cumplimiento</th><th>Resultado</th></tr>
+            <tr><td>C. Fuentes</td><td>Resonancia Magnética</td><td>6:51</td><td>1</td><td>96%</td><td><span class="pill ok">Aprobado</span></td></tr>
+            <tr><td>M. Araya</td><td>Resonancia Magnética</td><td>8:15</td><td>2</td><td>88%</td><td><span class="pill ok">Aprobado</span></td></tr>
+            <tr><td>J. Soto</td><td>Resonancia Magnética</td><td>10:02</td><td>4</td><td>71%</td><td><span class="pill mid">Reforzar</span></td></tr>
+            <tr><td>P. Reyes</td><td>Resonancia Magnética</td><td>12:40</td><td>6</td><td>58%</td><td><span class="pill bad">Repetir</span></td></tr>
           </table>
         </div>
       </section>
@@ -266,7 +266,7 @@
             <h3>Seguimiento por alumno</h3>
             <div class="hint">Haz clic en un alumno para ver su detalle, feedback y evolución</div>
             <table id="tbl-alumnos">
-              <tr><th>Alumno</th><th>Rol</th><th>Pruebas</th><th>Prácticas</th><th>Última sesión</th><th>Mejor tiempo</th><th>Cumplimiento</th><th>Progreso</th><th>Estado</th></tr>
+              <tr><th>Alumno</th><th>Rol</th><th>Sesiones</th><th>Prácticas</th><th>Última sesión</th><th>Mejor tiempo</th><th>Cumplimiento</th><th>Progreso</th><th>Estado</th></tr>
               <tr class="clickable" onclick="showAlumno()"><td><b>Camila Fuentes</b></td><td>Tecnólogo médico</td><td>8</td><td>11</td><td>21 jul</td><td>6:51</td><td>96%</td><td><div class="bar"><i style="width:96%"></i></div></td><td><span class="pill ok">Certificable</span></td></tr>
               <tr class="clickable" onclick="showAlumno()"><td><b>Miguel Araya</b></td><td>Técnico enfermería</td><td>6</td><td>9</td><td>19 jul</td><td>8:15</td><td>88%</td><td><div class="bar"><i style="width:88%"></i></div></td><td><span class="pill ok">Certificable</span></td></tr>
               <tr class="clickable" onclick="showAlumno()"><td><b>Javiera Soto</b></td><td>Técnico enfermería</td><td>4</td><td>5</td><td>18 jul</td><td>10:02</td><td>71%</td><td><div class="bar"><i style="width:71%"></i></div></td><td><span class="pill mid">En progreso</span></td></tr>
@@ -279,7 +279,7 @@
           <span class="back" onclick="hideAlumno()">← Volver a alumnos</span>
           <div class="kpis">
             <div class="kpi"><div class="lbl">Alumno</div><div class="val" style="font-size:17px">Camila Fuentes</div><div class="trend">Tecnólogo médico · Imagenología</div></div>
-            <div class="kpi"><div class="lbl">Intentos (prueba)</div><div class="val">8</div><div class="trend">+ 11 en modo práctica</div></div>
+            <div class="kpi"><div class="lbl">Intentos</div><div class="val">8</div><div class="trend"></div></div>
             <div class="kpi"><div class="lbl">Mejor cumplimiento</div><div class="val">96%</div><div class="trend up">▲ desde 55% inicial</div></div>
             <div class="kpi"><div class="lbl">Mejor tiempo</div><div class="val">6:51</div><div class="trend up">▼ desde 14:20</div></div>
           </div>
@@ -294,26 +294,26 @@
               <div class="step"><div class="n">✓</div><div class="nm2"><b>Fortaleza.</b> Comunicación de instrucciones al paciente en orden correcto</div></div>
               <div class="step"><div class="n">!</div><div class="nm2"><b>Mejorar.</b> Posicionamiento en camilla, con 2 errores recurrentes en alineación</div></div>
               <div class="step"><div class="n">!</div><div class="nm2"><b>Mejorar.</b> Tiempo en configuración del escáner sobre el objetivo (+45 s)</div></div>
-              <div class="step"><div class="n">→</div><div class="nm2"><b>Recomendación.</b> Repetir módulo de posicionamiento en modo práctica antes de la próxima prueba</div></div>
+              <div class="step"><div class="n">→</div><div class="nm2"><b>Recomendación.</b> Repetir módulo de posicionamiento en modo práctica antes de la próxima sesión</div></div>
             </div>
           </div>
           <div class="card" style="margin-top:14px">
             <h3>Historial de sesiones en Resonancia Magnética</h3>
-            <div class="hint">Registro automático de cada sesión en el simulador. Las sesiones en modo prueba puntúan; las de práctica quedan registradas como preparación.</div>
+            <div class="hint">Registro automático de cada sesión en el simulador.</div>
             <table>
-              <tr><th>#</th><th>Fecha</th><th>Modo</th><th>Tiempo</th><th>Errores</th><th>Cumplimiento</th><th>Resultado</th></tr>
-              <tr><td>19</td><td>21 jul · 09:14</td><td><span class="pill mode">Prueba</span></td><td>6:51</td><td>1</td><td>96%</td><td><span class="pill ok">Aprobado</span></td></tr>
-              <tr><td>18</td><td>20 jul · 17:02</td><td><span class="pill" style="background:#EEF2F5;color:var(--gray)">Práctica</span></td><td>7:10</td><td></td><td></td><td><span class="pill" style="background:#EEF2F5;color:var(--gray)">Registrada</span></td></tr>
-              <tr><td>17</td><td>20 jul · 16:41</td><td><span class="pill" style="background:#EEF2F5;color:var(--gray)">Práctica</span></td><td>7:58</td><td></td><td></td><td><span class="pill" style="background:#EEF2F5;color:var(--gray)">Registrada</span></td></tr>
-              <tr><td>16</td><td>17 jul · 10:23</td><td><span class="pill mode">Prueba</span></td><td>7:18</td><td>1</td><td>94%</td><td><span class="pill ok">Aprobado</span></td></tr>
-              <tr><td>15</td><td>15 jul · 11:47</td><td><span class="pill mode">Prueba</span></td><td>7:55</td><td>2</td><td>90%</td><td><span class="pill ok">Aprobado</span></td></tr>
-              <tr><td>14</td><td>14 jul · 18:20</td><td><span class="pill" style="background:#EEF2F5;color:var(--gray)">Práctica</span></td><td>8:32</td><td></td><td></td><td><span class="pill" style="background:#EEF2F5;color:var(--gray)">Registrada</span></td></tr>
-              <tr><td>13</td><td>10 jul · 09:05</td><td><span class="pill mode">Prueba</span></td><td>8:44</td><td>3</td><td>84%</td><td><span class="pill mid">Reforzar</span></td></tr>
-              <tr><td>12</td><td>08 jul · 16:12</td><td><span class="pill" style="background:#EEF2F5;color:var(--gray)">Práctica</span></td><td>9:20</td><td></td><td></td><td><span class="pill" style="background:#EEF2F5;color:var(--gray)">Registrada</span></td></tr>
-              <tr><td>11</td><td>06 jul · 10:31</td><td><span class="pill mode">Prueba</span></td><td>10:05</td><td>4</td><td>76%</td><td><span class="pill mid">Reforzar</span></td></tr>
-              <tr><td>10</td><td>02 jul · 12:09</td><td><span class="pill mode">Prueba</span></td><td>12:14</td><td>5</td><td>66%</td><td><span class="pill bad">Repetir</span></td></tr>
-              <tr><td>9</td><td>01 jul · 15:44</td><td><span class="pill" style="background:#EEF2F5;color:var(--gray)">Práctica</span></td><td>13:02</td><td></td><td></td><td><span class="pill" style="background:#EEF2F5;color:var(--gray)">Registrada</span></td></tr>
-              <tr><td>8</td><td>29 jun · 09:58</td><td><span class="pill mode">Prueba</span></td><td>14:20</td><td>7</td><td>55%</td><td><span class="pill bad">Repetir</span></td></tr>
+              <tr><th>#</th><th>Fecha</th><th>Tiempo</th><th>Errores</th><th>Cumplimiento</th><th>Resultado</th></tr>
+              <tr><td>19</td><td>21 jul · 09:14</td><td>6:51</td><td>1</td><td>96%</td><td><span class="pill ok">Aprobado</span></td></tr>
+              <tr><td>18</td><td>20 jul · 17:02</td><td>7:10</td><td></td><td></td><td><span class="pill" style="background:#EEF2F5;color:var(--gray)">Registrada</span></td></tr>
+              <tr><td>17</td><td>20 jul · 16:41</td><td>7:58</td><td></td><td></td><td><span class="pill" style="background:#EEF2F5;color:var(--gray)">Registrada</span></td></tr>
+              <tr><td>16</td><td>17 jul · 10:23</td><td>7:18</td><td>1</td><td>94%</td><td><span class="pill ok">Aprobado</span></td></tr>
+              <tr><td>15</td><td>15 jul · 11:47</td><td>7:55</td><td>2</td><td>90%</td><td><span class="pill ok">Aprobado</span></td></tr>
+              <tr><td>14</td><td>14 jul · 18:20</td><td>8:32</td><td></td><td></td><td><span class="pill" style="background:#EEF2F5;color:var(--gray)">Registrada</span></td></tr>
+              <tr><td>13</td><td>10 jul · 09:05</td><td>8:44</td><td>3</td><td>84%</td><td><span class="pill mid">Reforzar</span></td></tr>
+              <tr><td>12</td><td>08 jul · 16:12</td><td>9:20</td><td></td><td></td><td><span class="pill" style="background:#EEF2F5;color:var(--gray)">Registrada</span></td></tr>
+              <tr><td>11</td><td>06 jul · 10:31</td><td>10:05</td><td>4</td><td>76%</td><td><span class="pill mid">Reforzar</span></td></tr>
+              <tr><td>10</td><td>02 jul · 12:09</td><td>12:14</td><td>5</td><td>66%</td><td><span class="pill bad">Repetir</span></td></tr>
+              <tr><td>9</td><td>01 jul · 15:44</td><td>13:02</td><td></td><td></td><td><span class="pill" style="background:#EEF2F5;color:var(--gray)">Registrada</span></td></tr>
+              <tr><td>8</td><td>29 jun · 09:58</td><td>14:20</td><td>7</td><td>55%</td><td><span class="pill bad">Repetir</span></td></tr>
             </table>
             <div style="margin-top:10px;font-size:11.5px;color:var(--gray)">Mostrando 12 de 19 sesiones · <span style="color:var(--teal-dark);cursor:pointer">Ver historial completo</span></div>
           </div>
@@ -322,7 +322,7 @@
 
       <!-- ─────── ESCENARIOS ─────── -->
       <section class="view" id="v-escenarios">
-        <div class="note">Menú de escenarios disponibles en el simulador. La demo actual corresponde a <b>Procedimiento de Resonancia Magnética</b>; cada escenario registra tiempos, errores, cumplimiento de pasos y progreso por usuario en modo prueba.</div>
+        <div class="note">Menú de escenarios disponibles en el simulador. La demo actual corresponde a <b>Procedimiento de Resonancia Magnética</b>; cada escenario registra tiempos, errores, cumplimiento de pasos y progreso por usuario.</div>
         <div class="scen-grid">
           <div class="scen">
             <div class="ph"><img src="data:image/jpeg;base64,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" alt="Escenario de resonancia magnética" loading="lazy"></div>
@@ -452,7 +452,7 @@
           <h3 style="display:flex;align-items:center;justify-content:space-between">Configuración de mediciones
             <select class="sel"><option>Consulta médica</option><option>Resonancia Magnética</option><option>Manejo de equipamiento</option><option>Medicamentos alto riesgo</option><option>Emergencias críticas</option></select>
           </h3>
-          <div class="hint">Activa o desactiva lo que se evalúa en cada escenario. No todos los casos requieren evaluar todo. Lo desactivado no puntúa en el modo prueba.</div>
+          <div class="hint">Activa o desactiva lo que se evalúa en cada escenario. No todos los casos requieren evaluar todo. Lo desactivado no puntúa.</div>
           <div class="grid2" style="margin-top:6px">
             <div>
               <div class="nav-sec" style="padding:6px 0">Mediciones técnicas</div>
@@ -629,15 +629,17 @@ new Chart(chBlandas,{type:'radar',data:{
     const d=erroresPaso(act), L=d.map(o=>short(o.p.nombre)), data=d.map(o=>o.pct), col=data.map(v=>v>=20?'#DC2626':v>=12?'#D97706':'#01A49A');
     ['chErrores','chErrores2'].forEach(id=>updChart(id,c=>{c.data.labels=L;c.data.datasets[0].data=data;c.data.datasets[0].backgroundColor=col;}));
   }
-  const filaSes=s=>{const m=s.metricas||{};return `<tr><td>${s.usuario||'Alumno'}</td><td>${m.actividadNombre||s.actividadId||'—'}</td><td><span class="pill mode">Prueba</span></td><td>${mmss(m.tiempoSeg)}</td><td>${errs(m)}</td><td>${m.porcentaje||0}%</td><td>${pill(m.porcentaje||0)}</td></tr>`;};
-  function setUltimas(){const t=$('#v-dashboard table');if(!t)return;const h=t.querySelector('tr');t.innerHTML=h.outerHTML+SES.slice(-6).reverse().map(filaSes).join('');}
+  const filaSes=s=>{const m=s.metricas||{};return `<tr><td>${s.usuario||'Alumno'}</td><td>${m.actividadNombre||s.actividadId||'—'}</td><td>${mmss(m.tiempoSeg)}</td><td>${errs(m)}</td><td>${m.porcentaje||0}%</td><td>${pill(m.porcentaje||0)}</td></tr>`;};
+  function setUltimas(){const t=$('#v-dashboard table');if(!t)return;const rows=[...t.querySelectorAll('tr')];const head=rows[0].outerHTML;const demo=rows.slice(1).map(r=>r.outerHTML).join('');const live=SES.slice(-6).reverse().map(filaSes).join('');t.innerHTML=head+live+demo;}
   function setAlumnos(){
-    const t=$('#tbl-alumnos');if(!t)return;const by={};SES.forEach(s=>{(by[s.usuario||'Alumno']=by[s.usuario||'Alumno']||[]).push(s);});
-    const h=t.querySelector('tr');
-    t.innerHTML=h.outerHTML+Object.entries(by).map(([u,a])=>{
+    const t=$('#tbl-alumnos');if(!t)return;
+    const rows=[...t.querySelectorAll('tr')];const head=rows[0].outerHTML;const demo=rows.slice(1).map(r=>r.outerHTML).join('');
+    const by={};SES.forEach(s=>{(by[s.usuario||'Alumno']=by[s.usuario||'Alumno']||[]).push(s);});
+    const live=Object.entries(by).map(([u,a])=>{
       const mt=Math.min(...a.map(s=>s.metricas?.tiempoSeg||9999)),mp=Math.max(...a.map(s=>s.metricas?.porcentaje||0)),ult=a[a.length-1];
-      return `<tr class="clickable" onclick="showAlumno()"><td><b>${u}</b></td><td>Alumno</td><td>${a.length}</td><td>0</td><td>${(ult.guardadoEn||'').slice(5,10)}</td><td>${mmss(mt)}</td><td><div class="bar"><i style="width:${mp}%"></i></div></td><td>${pill(mp)}</td></tr>`;
+      return `<tr class="clickable" onclick="showAlumno()"><td><b>${u}</b></td><td>Alumno</td><td>${a.length}</td><td>0</td><td>${(ult.guardadoEn||'').slice(5,10)}</td><td>${mmss(mt)}</td><td><div class="bar"><i style="width:${mp}%"></i></div></td><td>${mp}%</td><td>${pill(mp)}</td></tr>`;
     }).join('');
+    t.innerHTML=head+live+demo;
   }
   function setDetalle(){
     const nom=alumno(), a=SES.filter(s=>(s.usuario||'Alumno')===nom); if(!a.length)return;
@@ -645,7 +647,7 @@ new Chart(chBlandas,{type:'radar',data:{
     if(kp.length>=4){kp[0].textContent=nom;kp[1].textContent=a.length;kp[2].textContent=Math.max(...a.map(s=>s.metricas?.porcentaje||0))+'%';kp[3].textContent=mmss(Math.min(...a.map(s=>s.metricas?.tiempoSeg||9999)));}
     updChart('chAlumno',c=>{c.data.labels=a.map((_,i)=>'Int. '+(i+1));c.data.datasets[0].data=a.map(s=>s.metricas?.porcentaje||0);c.data.datasets[1].data=a.map(s=>(s.metricas?.tiempoSeg||0)/60);});
     const ts=$$('#alumno-detail table'),t=ts[ts.length-1];
-    if(t){const h=t.querySelector('tr');t.innerHTML=h.outerHTML+a.slice().reverse().map((s,i)=>{const m=s.metricas||{};return `<tr><td>${a.length-i}</td><td>${(s.guardadoEn||'').slice(5,16)}</td><td><span class="pill mode">Prueba</span></td><td>${mmss(m.tiempoSeg)}</td><td>${errs(m)}</td><td>${m.porcentaje||0}%</td><td>${pill(m.porcentaje||0)}</td></tr>`;}).join('');}
+    if(t){const h=t.querySelector('tr');t.innerHTML=h.outerHTML+a.slice().reverse().map((s,i)=>{const m=s.metricas||{};return `<tr><td>${a.length-i}</td><td>${(s.guardadoEn||'').slice(5,16)}</td><td>${mmss(m.tiempoSeg)}</td><td>${errs(m)}</td><td>${m.porcentaje||0}%</td><td>${pill(m.porcentaje||0)}</td></tr>`;}).join('');}
   }
   function setEscenarios(){
     const nR=SES.filter(s=>s.actividadId==='resonancia').length;
@@ -659,7 +661,7 @@ new Chart(chBlandas,{type:'radar',data:{
   async function aplicar(){
     await cargar();
     if(!SES.length){console.info('[Delegate] sin sesiones — se muestra la demo.');return;}
-    try{setKpis();setLearning();setErrores();setUltimas();setAlumnos();setDetalle();setEscenarios();}
+    try{setUltimas();setAlumnos();}
     catch(e){console.warn('[Delegate] error aplicando data',e);}
   }
   if(typeof initCharts==='function'){const orig=initCharts;initCharts=function(){orig();setTimeout(aplicar,60);};}
