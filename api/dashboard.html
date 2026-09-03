@@ -629,7 +629,7 @@ new Chart(chBlandas,{type:'radar',data:{
     const d=erroresPaso(act), L=d.map(o=>short(o.p.nombre)), data=d.map(o=>o.pct), col=data.map(v=>v>=20?'#DC2626':v>=12?'#D97706':'#01A49A');
     ['chErrores','chErrores2'].forEach(id=>updChart(id,c=>{c.data.labels=L;c.data.datasets[0].data=data;c.data.datasets[0].backgroundColor=col;}));
   }
-  const filaSes=s=>{const m=s.metricas||{};return `<tr><td>${s.usuario||'Alumno'}</td><td>${m.actividadNombre||s.actividadId||'—'}</td><td>${mmss(m.tiempoSeg)}</td><td>${errs(m)}</td><td>${m.porcentaje||0}%</td><td>${pill(m.porcentaje||0)}</td></tr>`;};
+  const filaSes=s=>{const m=s.metricas||{};return `<tr class="clickable" onclick="mostrarSesion('${s.id}')"><td>${s.usuario||'Alumno'}</td><td>${m.actividadNombre||s.actividadId||'—'}</td><td>${mmss(m.tiempoSeg)}</td><td>${errs(m)}</td><td>${m.porcentaje||0}%</td><td>${pill(m.porcentaje||0)}</td></tr>`;};
   function setUltimas(){const t=$('#v-dashboard table');if(!t)return;const rows=[...t.querySelectorAll('tr')];const head=rows[0].outerHTML;const demo=rows.slice(1).map(r=>r.outerHTML).join('');const live=SES.slice(-6).reverse().map(filaSes).join('');t.innerHTML=head+live+demo;}
   function setAlumnos(){
     const t=$('#tbl-alumnos');if(!t)return;
@@ -666,6 +666,37 @@ new Chart(chBlandas,{type:'radar',data:{
   }
   if(typeof initCharts==='function'){const orig=initCharts;initCharts=function(){orig();setTimeout(aplicar,60);};}
   window.DelegateRefrescar=aplicar;
+
+  // ---- Modal de detalle de una sesión (clic en Últimas sesiones) ----
+  (function(){
+    document.body.insertAdjacentHTML('beforeend',
+      '<div id="ovSesion" style="display:none;position:fixed;inset:0;background:rgba(16,32,45,.45);z-index:60;align-items:center;justify-content:center;padding:16px" onclick="if(event.target===this)cerrarSesion()">'
+      +'<div class="card" style="max-width:520px;width:100%;max-height:86vh;overflow:auto">'
+      +'<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">'
+      +'<div><h3 id="msTitulo" style="margin:0"></h3><div class="crumb" id="msSub"></div></div>'
+      +'<span onclick="cerrarSesion()" style="cursor:pointer;font-size:20px;color:var(--gray);line-height:1">&times;</span></div>'
+      +'<div class="kpis" id="msKpis" style="grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px"></div>'
+      +'<h3 style="font-size:12.5px">Pasos</h3><div id="msPasos"></div></div></div>');
+  })();
+  window.mostrarSesion=function(id){
+    const s=SES.find(x=>String(x.id)===String(id)); if(!s)return;
+    const m=s.metricas||{};
+    document.getElementById('msTitulo').textContent=(s.usuario||'Alumno');
+    document.getElementById('msSub').textContent=(m.actividadNombre||s.actividadId||'')+' · '+(s.guardadoEn||'');
+    document.getElementById('msKpis').innerHTML=[
+      ['Cumplimiento',(m.porcentaje||0)+'%'],['Tiempo',mmss(m.tiempoSeg)],
+      ['Pasos',(m.pasosHechos||0)+'/'+(m.pasosTotales||0)],['Errores',errs(m)]
+    ].map(([l,v])=>`<div class="kpi" style="padding:10px"><div class="lbl">${l}</div><div class="val" style="font-size:18px">${v}</div></div>`).join('');
+    document.getElementById('msPasos').innerHTML=(m.pasos||[]).map(p=>{
+      const e=p.estado;
+      const pl=e==='hecho'?'<span class="pill ok">Hecho</span>':e==='omitido'?'<span class="pill bad">Omitido</span>':'<span class="pill" style="background:#EEF2F5;color:var(--gray)">No disp.</span>';
+      const ic=e==='hecho'?'&#10003;':e==='omitido'?'&#10007;':'&ndash;';
+      return `<div class="step"><div class="n">${ic}</div><div class="nm2">${p.nombre}</div><div style="margin-left:auto">${pl}</div></div>`;
+    }).join('') || '<div class="empty">Esta sesión no trae detalle de pasos.</div>';
+    document.getElementById('ovSesion').style.display='flex';
+  };
+  window.cerrarSesion=function(){const o=document.getElementById('ovSesion');if(o)o.style.display='none';};
+
 
   // Detalle del alumno clickeado (real si está en vivo; demo si no).
   function poblarDetalle(nombre){
