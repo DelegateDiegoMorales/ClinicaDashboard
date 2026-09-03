@@ -27,16 +27,15 @@ ACTIVIDADES = {
         "id": "lavado_manos",
         "nombre": "Lavado de Manos Quirúrgico",
         "icono": "🧼",
+        # Códigos y nombres alineados con el ScriptableObject de Unity (Act_Lavado).
         "pasos": [
-            {"codigo": "LAV_RETIRA_ACCESORIOS", "nombre": "Retira reloj/anillos, antebrazo descubierto hasta el codo", "obligatorio": True,  "disponible": True},
-            {"codigo": "LAV_VERIFICA_UNAS",     "nombre": "Verifica uñas cortas, limpias y sin extensiones",          "obligatorio": True,  "disponible": False},  # 2 - off demo
-            {"codigo": "LAV_MOJA",              "nombre": "Moja manos y antebrazo (manos más altas que el codo)",     "obligatorio": True,  "disponible": True},
-            {"codigo": "LAV_ESCOBILLA",         "nombre": "Escobilla: rotatorios en dorso, palma e interdigitales",   "obligatorio": True,  "disponible": True},
-            {"codigo": "LAV_ROTATORIO_BRAZO",   "nombre": "Rotatorios en muñecas y antebrazo",                        "obligatorio": True,  "disponible": True},
-            {"codigo": "LAV_LIMPIA_UNAS",       "nombre": "Limpia las uñas",                                          "obligatorio": True,  "disponible": True},
-            {"codigo": "LAV_ENJUAGA",           "nombre": "Enjuaga (manos → muñeca → antebrazo, manos en alto)",      "obligatorio": True,  "disponible": True},
-            {"codigo": "LAV_CIERRA_LLAVE",      "nombre": "Cierra la llave con codo o pie, sin usar las manos",       "obligatorio": True,  "disponible": False},  # 8 - off demo
-            {"codigo": "LAV_SECA",              "nombre": "Se dirige con manos en alto y seca con compresa estéril",  "obligatorio": True,  "disponible": True},
+            {"codigo": "LAV_RETIRA_ACCESORIOS", "nombre": "Retirar accesorios",         "obligatorio": True, "disponible": True},
+            {"codigo": "LAV_MOJA",              "nombre": "Mojar manos y brazos",       "obligatorio": True, "disponible": True},
+            {"codigo": "LAV_JABON",             "nombre": "Colocar jabón",              "obligatorio": True, "disponible": True},
+            {"codigo": "LAV_ESCOBILLA",         "nombre": "Frotar manos",               "obligatorio": True, "disponible": True},
+            {"codigo": "LAV_ROTATORIO_BRAZO",   "nombre": "Frotar brazos",              "obligatorio": True, "disponible": True},
+            {"codigo": "LAV_ENJUAGAR",          "nombre": "Enjuagar manos y brazos",    "obligatorio": True, "disponible": True},
+            {"codigo": "LAV_SECAR",             "nombre": "Secar manos y brazos",       "obligatorio": True, "disponible": True},
         ],
     },
 }

@@ -16,7 +16,9 @@ KV_TOKEN = os.environ.get("KV_REST_API_TOKEN") or os.environ.get("UPSTASH_REDIS_
 KEY = "delegate:sesiones"
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-LOCAL_DIR = os.path.join(HERE, "..", "data")
+# En Vercel el disco es de SOLO LECTURA salvo /tmp. Usa /tmp allí (efímero) y
+# ../data en local. Para persistencia real en Vercel, configura KV/Upstash.
+LOCAL_DIR = "/tmp/delegate_data" if os.environ.get("VERCEL") else os.path.join(HERE, "..", "data")
 
 
 def usando_kv():
@@ -42,26 +44,33 @@ def _kv_guardar(lista):
 
 # ---- Local (archivos) ----
 def _local_path():
-    os.makedirs(LOCAL_DIR, exist_ok=True)
     return os.path.join(LOCAL_DIR, "sesiones.json")
 
 
 def _local_cargar():
     p = _local_path()
-    if not os.path.exists(p):
-        return []
-    with open(p, encoding="utf-8") as f:
-        return json.load(f)
+    try:
+        if os.path.exists(p):
+            with open(p, encoding="utf-8") as f:
+                return json.load(f)
+    except Exception:
+        pass
+    return []
 
 
 def _local_guardar(lista):
+    os.makedirs(LOCAL_DIR, exist_ok=True)   # solo al escribir
     with open(_local_path(), "w", encoding="utf-8") as f:
         json.dump(lista, f, ensure_ascii=False, indent=2)
 
 
 # ---- API pública ----
 def cargar_todas():
-    return _kv_cargar() if usando_kv() else _local_cargar()
+    try:
+        return _kv_cargar() if usando_kv() else _local_cargar()
+    except Exception as e:
+        print("[storage] error al cargar:", e)
+        return []
 
 
 def guardar(sesion):

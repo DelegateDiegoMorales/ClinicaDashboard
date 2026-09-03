@@ -26,10 +26,10 @@ RESONANCIA = [
     ("PACIENTE_ACOSTADO", 0.20), ("PACIENTE_EN_EQUIPO", 0.25), ("ESCANEO_INICIO", 0.18),
     ("ESCANEO_FIN", 0.10), ("SESION_FIN", 0.05),
 ]
-LAVADO = [  # solo los pasos disponibles en la demo
-    ("LAV_RETIRA_ACCESORIOS", 0.20), ("LAV_MOJA", 0.10), ("LAV_ESCOBILLA", 0.35),
-    ("LAV_ROTATORIO_BRAZO", 0.30), ("LAV_LIMPIA_UNAS", 0.25), ("LAV_ENJUAGA", 0.15),
-    ("LAV_SECA", 0.12),
+LAVADO = [  # 7 pasos, alineados con Act_Lavado (Unity) y api/actividades.py
+    ("LAV_RETIRA_ACCESORIOS", 0.20), ("LAV_MOJA", 0.10), ("LAV_JABON", 0.18),
+    ("LAV_ESCOBILLA", 0.35), ("LAV_ROTATORIO_BRAZO", 0.30), ("LAV_ENJUAGAR", 0.15),
+    ("LAV_SECAR", 0.12),
 ]
 
 
